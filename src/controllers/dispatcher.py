@@ -9,12 +9,15 @@ from typing import Dict, Any, Optional
 from src.nlu.intent_parser import IntentObject, ActionType
 from .base import BaseMediaController
 from .mock_player import MockMediaPlayer
+from .router import PlayerRouter
 
 
 class MediaDispatcher:
     """Routes IntentObjects to the appropriate media controller."""
 
-    def __init__(self, default_controller: Optional[BaseMediaController] = None):
+    def __init__(self, default_controller: Optional[BaseMediaController] = None,
+                 router: Optional[PlayerRouter] = None):
+        self.router = router
         self.default_controller = default_controller or MockMediaPlayer("system_default")
         self.controllers: Dict[str, BaseMediaController] = {
             "default": self.default_controller,
@@ -26,7 +29,9 @@ class MediaDispatcher:
         self.controllers[name.lower()] = controller
 
     def get_controller(self, target_player: Optional[str] = None) -> BaseMediaController:
-        """Resolves target controller or falls back to default."""
+        """Resolves target controller (explicit, auto-detected, then default)."""
+        if self.router is not None:
+            target_player = self.router.resolve(target_player, available=self.controllers.keys())
         if target_player and target_player.lower() in self.controllers:
             return self.controllers[target_player.lower()]
         return self.default_controller
