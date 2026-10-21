@@ -185,6 +185,15 @@ class IntentParser:
         if re.search(r"\b(exit\s*fullscreen|leave\s*fullscreen|minimize\s*video)\b", cleaned):
             return IntentObject(action=ActionType.EXIT_FULLSCREEN, target_player=target_player, raw_text=raw_text)
 
+        track_match = re.search(r"\b(?:subtitles?|captions?)\s*(?:track|language|to)\s*(\w+)\b", cleaned)
+        if track_match:
+            return IntentObject(
+                action=ActionType.SUBTITLES_TRACK,
+                target_player=target_player,
+                params={"track": track_match.group(1)},
+                raw_text=raw_text,
+            )
+
         if re.search(r"\b(subtitles?\s*on|subtitles?\s*off|toggle\s*subtitles?)\b", cleaned):
             enable = False if "off" in cleaned else True
             return IntentObject(

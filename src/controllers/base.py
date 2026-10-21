@@ -94,3 +94,21 @@ class BaseMediaController(ABC):
     def get_status(self) -> Dict[str, Any]:
         """Returns player status dictionary."""
         pass
+
+    # Display, subtitle and rate controls (VAMC-F-016, F-017, F-018).
+    # Concrete defaults report "unsupported" so audio-only players need not implement them.
+    def set_fullscreen(self, enabled: bool) -> bool:
+        """Enters or exits fullscreen. Returns False when unsupported."""
+        return False
+
+    def set_subtitles(self, enabled: bool) -> bool:
+        """Shows or hides subtitles. Returns False when unsupported."""
+        return False
+
+    def select_subtitle_track(self, track: str) -> bool:
+        """Selects a subtitle track by index or language. Returns False when unsupported."""
+        return False
+
+    def set_playback_rate(self, rate: float) -> float:
+        """Sets playback rate (0.5x-2.0x). Returns the applied rate, or 1.0 when unsupported."""
+        return 1.0
