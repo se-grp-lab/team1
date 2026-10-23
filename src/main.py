@@ -14,11 +14,15 @@ from src.nlu.asr_engine import ASREngine
 from src.nlu.intent_parser import IntentParser
 from src.config.alias_manager import AliasManager
 from src.controllers.dispatcher import MediaDispatcher
+from src.controllers.router import PlayerRouter
+from src.learning.adaptation import AcousticAdapter
+from src.security.memory import SecureAudioBuffer
+from src.ui.hud import HUDOverlay
 from src.ui.silent_feedback import SilentFeedbackDispatcher
 
 
 class VAMCDaemon:
-    """Central daemon tying all Sprint 1 subsystems into an integrated pipeline."""
+    """Central daemon tying all subsystems into an integrated pipeline."""
 
     def __init__(self, config_path: Optional[str] = None):
         self.wake_detector = WakeWordDetector(wake_phrase="hey assistant")
@@ -27,8 +31,10 @@ class VAMCDaemon:
         self.asr = ASREngine()
         self.parser = IntentParser()
         self.alias_mgr = AliasManager(config_path=config_path)
-        self.dispatcher = MediaDispatcher()
-        self.feedback = SilentFeedbackDispatcher()
+        self.dispatcher = MediaDispatcher(router=PlayerRouter())
+        self.hud = HUDOverlay()
+        self.feedback = SilentFeedbackDispatcher(visual_listener=self.hud.show)
+        self.adapter = AcousticAdapter()
         self._last_e2e_latency_ms: float = 0.0
 
     def start(self) -> None:
@@ -44,7 +50,8 @@ class VAMCDaemon:
     def process_voice_command(self, audio_pcm: bytes, simulated_text: Optional[str] = None) -> Dict[str, Any]:
         """Executes the full end-to-end voice pipeline:
 
-        1. ASR Transcription (offline)
+        0. Raw audio is held in a RAM buffer that is zeroized when processing ends
+        1. ASR Transcription (offline) with on-device adaptation
         2. Alias Resolution
         3. Intent Parsing
         4. Media Controller Dispatch
@@ -53,7 +60,9 @@ class VAMCDaemon:
         start_time = time.perf_counter()
 
         # Step 1: Offline Speech Recognition
-        transcription = self.asr.transcribe(audio_pcm, simulated_text=simulated_text)
+        with SecureAudioBuffer(audio_pcm) as audio_buf:
+            transcription = self.asr.transcribe(bytes(audio_buf.view()), simulated_text=simulated_text)
+        transcription = self.adapter.correct(transcription)
 
         # Step 2: Custom Alias Mapping
         canonical_text = self.alias_mgr.resolve(transcription)

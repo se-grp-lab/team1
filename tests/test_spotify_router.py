@@ -41,28 +41,28 @@ class TestSpotifyController(unittest.TestCase):
 
 class TestPlayerRouter(unittest.TestCase):
     def test_explicit_target_wins(self):
-        r = PlayerRouter(lambda: ["vlc"])
+        r = PlayerRouter(lambda: ["vlc"], cache_ttl_s=0)
         self.assertEqual(r.resolve("spotify"), "spotify")
 
     def test_detects_running_player(self):
-        r = PlayerRouter(lambda: ["bash", "VLC", "Xorg"])
+        r = PlayerRouter(lambda: ["bash", "VLC", "Xorg"], cache_ttl_s=0)
         self.assertEqual(r.resolve(), "vlc")
 
     def test_priority_when_multiple_running(self):
-        r = PlayerRouter(lambda: ["spotify", "mpv"])
+        r = PlayerRouter(lambda: ["spotify", "mpv"], cache_ttl_s=0)
         self.assertEqual(r.resolve(), "mpv")
 
     def test_sticky_last_used_player(self):
-        r = PlayerRouter(lambda: ["spotify", "mpv"])
+        r = PlayerRouter(lambda: ["spotify", "mpv"], cache_ttl_s=0)
         r.resolve("spotify")
         self.assertEqual(r.resolve(), "spotify")
 
     def test_none_running_falls_back(self):
-        r = PlayerRouter(lambda: ["bash"])
+        r = PlayerRouter(lambda: ["bash"], cache_ttl_s=0)
         self.assertIsNone(r.resolve())
 
     def test_available_filter(self):
-        r = PlayerRouter(lambda: ["mpv", "vlc"])
+        r = PlayerRouter(lambda: ["mpv", "vlc"], cache_ttl_s=0)
         self.assertEqual(r.resolve(available=["vlc"]), "vlc")
 
 
@@ -72,7 +72,7 @@ class TestDispatcherRouting(unittest.TestCase):
         from src.controllers.mock_player import MockMediaPlayer
         from src.nlu.intent_parser import IntentParser
 
-        d = MediaDispatcher(router=PlayerRouter(lambda: ["vlc"]))
+        d = MediaDispatcher(router=PlayerRouter(lambda: ["vlc"], cache_ttl_s=0))
         vlc = MockMediaPlayer("vlc")
         d.register_controller("vlc", vlc)
         d.dispatch(IntentParser().parse("play"))

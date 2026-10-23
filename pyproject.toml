@@ -19,6 +19,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+secure = [
+    "keyring>=24.0.0"
+]
 dev = [
     "pytest>=7.4.0",
     "flake8>=6.0.0"
