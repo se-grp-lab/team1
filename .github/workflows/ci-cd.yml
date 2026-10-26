@@ -35,6 +35,8 @@ jobs:
     name: Test Suite (Python ${{ matrix.python-version }})
     needs: lint
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
