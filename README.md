@@ -106,3 +106,14 @@ To run the full test suite:
 ```bash
 python3 -m unittest discover -s tests
 ```
+
+---
+
+## CI/CD Pipeline
+
+The repository includes an automated GitHub Actions CI/CD pipeline configured in `.github/workflows/ci-cd.yml`:
+1. **Code Quality & Linting (`lint`)**: Enforces PEP8 syntax and code quality checks using `flake8`.
+2. **Multi-Python Test Matrix (`test`)**: Executes all 16 automated unit and integration tests via `pytest` across Python 3.10, 3.11, and 3.12 (as specified in SRS Section 2.4).
+3. **NFR Latency & Purity Verification**: Automates latency benchmark verification across 100 runs, verifying the `<= 400 ms` budget (`VAMC-NF-001`) and `0 dB` audio emissions (`VAMC-NF-005`).
+4. **Build & Package Artifacts (`build`)**: Packages standard Python distribution wheels (`.whl`) and source tarballs (`.tar.gz`) with automated artifact archiving and job summaries.
+

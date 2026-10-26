@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vamc"
+version = "0.1.0"
+description = "Voice Assistant for Multimedia Controls"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Andey Hemanth", email = "andy34g7@gmail.com" },
+    { name = "Aadya Arvind", email = "AadyaArvind19@users.noreply.github.com" },
+    { name = "Aakash Sharma", email = "aakash11019@users.noreply.github.com" },
+    { name = "Soubhagya", email = "Soubhagya981999@users.noreply.github.com" }
+]
+dependencies = [
+    "numpy>=1.24.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "flake8>=6.0.0"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

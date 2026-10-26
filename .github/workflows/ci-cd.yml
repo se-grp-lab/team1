@@ -1,0 +1,100 @@
+name: VAMC CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Code Quality & Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Linting Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      - name: Run Flake8 Linter
+        run: |
+          # Stop build if there are Python syntax errors or undefined names
+          flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Exit-zero treats all errors as warnings. Max line length 120.
+          flake8 src tests --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
+
+  test:
+    name: Test Suite (Python ${{ matrix.python-version }})
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install .
+
+      - name: Run Automated Test Suite
+        run: |
+          pytest -v --durations=10
+
+      - name: Run NFR Latency Benchmark (VAMC-NF-001)
+        run: |
+          python -m unittest tests/test_e2e_latency.py
+
+  build:
+    name: Build & Package Artifacts
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Build Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Build Source Distribution and Wheel
+        run: |
+          python -m build
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: vamc-dist
+          path: dist/
+          retention-days: 14
+
+      - name: Publish CI/CD Summary
+        run: |
+          echo "### VAMC CI/CD Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: All linting and test matrix suites passed successfully." >> $GITHUB_STEP_SUMMARY
+          echo "- **Test Coverage**: Audio Ingestion, Offline ASR/NLU, Controllers, and Silent HUD." >> $GITHUB_STEP_SUMMARY
+          echo "- **NFR Compliance**: Latency <= 400ms benchmark verified." >> $GITHUB_STEP_SUMMARY
+          echo "- **Artifacts**: Packaged wheel and sdist generated in dist/." >> $GITHUB_STEP_SUMMARY
