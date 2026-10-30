@@ -9,12 +9,15 @@ from typing import Dict, Any, Optional
 from src.nlu.intent_parser import IntentObject, ActionType
 from .base import BaseMediaController
 from .mock_player import MockMediaPlayer
+from .router import PlayerRouter
 
 
 class MediaDispatcher:
     """Routes IntentObjects to the appropriate media controller."""
 
-    def __init__(self, default_controller: Optional[BaseMediaController] = None):
+    def __init__(self, default_controller: Optional[BaseMediaController] = None,
+                 router: Optional[PlayerRouter] = None):
+        self.router = router
         self.default_controller = default_controller or MockMediaPlayer("system_default")
         self.controllers: Dict[str, BaseMediaController] = {
             "default": self.default_controller,
@@ -26,7 +29,9 @@ class MediaDispatcher:
         self.controllers[name.lower()] = controller
 
     def get_controller(self, target_player: Optional[str] = None) -> BaseMediaController:
-        """Resolves target controller or falls back to default."""
+        """Resolves target controller (explicit, auto-detected, then default)."""
+        if self.router is not None:
+            target_player = self.router.resolve(target_player, available=self.controllers.keys())
         if target_player and target_player.lower() in self.controllers:
             return self.controllers[target_player.lower()]
         return self.default_controller
@@ -113,6 +118,25 @@ class MediaDispatcher:
         elif action == ActionType.UNMUTE:
             controller.unmute()
             res_msg = "Unmuted"
+
+        elif action in (ActionType.FULLSCREEN, ActionType.EXIT_FULLSCREEN):
+            enable = action == ActionType.FULLSCREEN
+            success = controller.set_fullscreen(enable)
+            res_msg = ("Fullscreen" if enable else "Exited Fullscreen") if success else "Fullscreen unsupported"
+
+        elif action == ActionType.SUBTITLES_TOGGLE:
+            enable = params.get("enable", True)
+            success = controller.set_subtitles(enable)
+            res_msg = (f"Subtitles {'On' if enable else 'Off'}") if success else "Subtitles unsupported"
+
+        elif action == ActionType.SUBTITLES_TRACK:
+            track = params.get("track", "default")
+            success = controller.select_subtitle_track(track)
+            res_msg = f"Subtitles: {track}" if success else "Subtitles unsupported"
+
+        elif action == ActionType.PLAYBACK_RATE:
+            rate = controller.set_playback_rate(params.get("rate", 1.0))
+            res_msg = f"Speed {rate:g}x"
 
         else:
             success = False
