@@ -59,36 +59,46 @@ All 26 backlog items are tracked on GitHub with labels, story points (Fibonacci 
 
 ---
 
-### Sprint 2: Player Integrations, Silent HUD & Privacy (Oct 19 - Oct 23, 2026) [PLANNED]
-*Total Story Points Committed: **44 Points***  
-*Milestone: [Sprint 2 (Oct 19 - Oct 23)](https://github.com/se-grp-lab/team1/milestone/2)*
+### Sprint 2: Player Integrations, Silent HUD & Privacy (Oct 19 - Oct 23, 2026) [COMPLETED]
+*Committed Velocity: **44 Points** | Completed Velocity: **44 Points (100%)***  
+*Milestone: [Sprint 2 (Oct 19 - Oct 23)](https://github.com/se-grp-lab/team1/milestone/2?closed=1) (Status: Closed)*
 
 | Issue | Req ID | User Story Summary | Epic / Category | Priority | Story Points | Assignee | Status |
 | :---: | :---: | :--- | :--- | :---: | :---: | :--- | :---: |
-| [#15](https://github.com/se-grp-lab/team1/issues/15) | `VAMC-F-013` | Local Media Player Integration (VLC & MPV IPC) | Player Integrations | High | **5** | [@AadyaArvind19](https://github.com/AadyaArvind19) | Open |
-| [#16](https://github.com/se-grp-lab/team1/issues/16) | `VAMC-F-014` | Cloud Streaming Integration (Spotify Web API & Connect) | Player Integrations | High | **5** | [@AadyaArvind19](https://github.com/AadyaArvind19) | Open |
-| [#17](https://github.com/se-grp-lab/team1/issues/17) | `VAMC-F-015` | Active Media Player Auto-Detection & Routing | Player Integrations | Medium | **3** | [@AadyaArvind19](https://github.com/AadyaArvind19) | Open |
-| [#18](https://github.com/se-grp-lab/team1/issues/18) | `VAMC-F-016` | Video Display Mode & Fullscreen Controls | Display & Subtitles | Medium | **2** | [@aakash11019](https://github.com/aakash11019) | Open |
-| [#19](https://github.com/se-grp-lab/team1/issues/19) | `VAMC-F-017` | Voice-Activated Subtitle Toggle & Track Selection | Display & Subtitles | Medium | **3** | [@aakash11019](https://github.com/aakash11019) | Open |
-| [#20](https://github.com/se-grp-lab/team1/issues/20) | `VAMC-F-018` | Variable-Speed Playback Rate Adjustment ($0.5\times - 2.0\times$) | Display & Subtitles | Medium | **2** | [@aakash11019](https://github.com/aakash11019) | Open |
-| [#21](https://github.com/se-grp-lab/team1/issues/21) | `VAMC-F-019` | Silent Translucent Floating HUD Overlay Pill | Silent HUD UI | High | **5** | [@aakash11019](https://github.com/aakash11019) | Open |
-| [#22](https://github.com/se-grp-lab/team1/issues/22) | `VAMC-F-020` | Automatic HUD Auto-Dismiss & Focus Non-Stealing | Silent HUD UI | High | **3** | [@aakash11019](https://github.com/aakash11019) | Open |
-| [#23](https://github.com/se-grp-lab/team1/issues/23) | `VAMC-F-021` | Edge-Based Private Acoustic Adaptation (On-Device) | Federated Learning | Medium | **5** | [@Soubhagya981999](https://github.com/Soubhagya981999) | Open |
-| [#24](https://github.com/se-grp-lab/team1/issues/24) | `VAMC-F-022` | Differentially Private Federated Weight Synchronization | Federated Learning | Low | **5** | [@Soubhagya981999](https://github.com/Soubhagya981999) | Open |
-| [#25](https://github.com/se-grp-lab/team1/issues/25) | `PRJ-SR-001` | Volatile RAM Audio Zeroization & Memory Disposal | Security & Privacy | High | **3** | [@Soubhagya981999](https://github.com/Soubhagya981999) | Open |
-| [#26](https://github.com/se-grp-lab/team1/issues/26) | `PRJ-SR-002` | Encrypted Credential Storage via OS Native Keyrings | Security & Privacy | High | **3** | [@Soubhagya981999](https://github.com/Soubhagya981999) | Open |
+| [#15](https://github.com/se-grp-lab/team1/issues/15) | `VAMC-F-013` | Local Media Player Integration (VLC & MPV IPC) | Player Integrations | High | **5** | [@AadyaArvind19](https://github.com/AadyaArvind19) | Closed |
+| [#16](https://github.com/se-grp-lab/team1/issues/16) | `VAMC-F-014` | Cloud Streaming Integration (Spotify Web API & Connect) | Player Integrations | High | **5** | [@AadyaArvind19](https://github.com/AadyaArvind19) | Closed |
+| [#17](https://github.com/se-grp-lab/team1/issues/17) | `VAMC-F-015` | Active Media Player Auto-Detection & Routing | Player Integrations | Medium | **3** | [@AadyaArvind19](https://github.com/AadyaArvind19) | Closed |
+| [#18](https://github.com/se-grp-lab/team1/issues/18) | `VAMC-F-016` | Video Display Mode & Fullscreen Controls | Display & Subtitles | Medium | **2** | [@aakash11019](https://github.com/aakash11019) | Closed |
+| [#19](https://github.com/se-grp-lab/team1/issues/19) | `VAMC-F-017` | Voice-Activated Subtitle Toggle & Track Selection | Display & Subtitles | Medium | **3** | [@aakash11019](https://github.com/aakash11019) | Closed |
+| [#20](https://github.com/se-grp-lab/team1/issues/20) | `VAMC-F-018` | Variable-Speed Playback Rate Adjustment ($0.5\times - 2.0\times$) | Display & Subtitles | Medium | **2** | [@aakash11019](https://github.com/aakash11019) | Closed |
+| [#21](https://github.com/se-grp-lab/team1/issues/21) | `VAMC-F-019` | Silent Translucent Floating HUD Overlay Pill | Silent HUD UI | High | **5** | [@aakash11019](https://github.com/aakash11019) | Closed |
+| [#22](https://github.com/se-grp-lab/team1/issues/22) | `VAMC-F-020` | Automatic HUD Auto-Dismiss & Focus Non-Stealing | Silent HUD UI | High | **3** | [@aakash11019](https://github.com/aakash11019) | Closed |
+| [#23](https://github.com/se-grp-lab/team1/issues/23) | `VAMC-F-021` | Edge-Based Private Acoustic Adaptation (On-Device) | Federated Learning | Medium | **5** | [@Soubhagya981999](https://github.com/Soubhagya981999) | Closed |
+| [#24](https://github.com/se-grp-lab/team1/issues/24) | `VAMC-F-022` | Differentially Private Federated Weight Synchronization | Federated Learning | Low | **5** | [@Soubhagya981999](https://github.com/Soubhagya981999) | Closed |
+| [#25](https://github.com/se-grp-lab/team1/issues/25) | `PRJ-SR-001` | Volatile RAM Audio Zeroization & Memory Disposal | Security & Privacy | High | **3** | [@Soubhagya981999](https://github.com/Soubhagya981999) | Closed |
+| [#26](https://github.com/se-grp-lab/team1/issues/26) | `PRJ-SR-002` | Encrypted Credential Storage via OS Native Keyrings | Security & Privacy | High | **3** | [@Soubhagya981999](https://github.com/Soubhagya981999) | Closed |
 
 ---
 
 ## Story Point Allocation by Assignee
 
-| Team Member | Project Role | Sprint 1 Completed | Sprint 2 Planned | Total Points |
+| Team Member | Project Role | Sprint 1 Completed | Sprint 2 Completed | Total Points |
 | :--- | :--- | :---: | :---: | :---: |
 | **Andey Hemanth** (`@Andy34G7`) | Architecture / ASR & NLU Specialist | **26** | **0** | **26** |
 | **Aadya Arvind** (`@AadyaArvind19`) | Media Integration & Controls Lead | **18** | **13** | **31** |
 | **Aakash Sharma** (`@aakash11019`) | UI/UX & Silent Feedback Designer | **5** | **15** | **20** |
 | **Soubhagya** (`@Soubhagya981999`) | Federated Learning & Security Lead | **0** | **16** | **16** |
 | **Total Velocity** | - | **49** | **44** | **93 Points** |
+
+---
+
+## Sprint 2 Verification and Test Results
+
+Sprint 2 adds 59 tests (75 total, all passing):
+- **Player Integrations**: mpv JSON IPC and VLC HTTP payloads, Spotify Web API endpoints (token, device, clamped volume), and active player auto-detection with sticky routing.
+- **Display Controls**: fullscreen, subtitle toggle and track selection, and playback rate clamped to 0.5x-2.0x, with graceful failure on audio-only players.
+- **Silent HUD**: translucent, click-through, always-on-top pill that never accepts focus and auto-dismisses after 2 seconds.
+- **Privacy and Security**: RAM audio buffers zeroized after every command (including on errors), credentials stored only in the OS keyring with no plaintext fallback, on-device acoustic adaptation, and differentially private federated updates (L2 clipping, Gaussian noise, epsilon budget accounting).
 
 ---
 
@@ -113,7 +123,7 @@ python3 -m unittest discover -s tests
 
 The repository includes an automated GitHub Actions CI/CD pipeline configured in `.github/workflows/ci-cd.yml`:
 1. **Code Quality & Linting (`lint`)**: Enforces PEP8 syntax and code quality checks using `flake8`.
-2. **Multi-Python Test Matrix (`test`)**: Executes all 16 automated unit and integration tests via `pytest` across Python 3.10, 3.11, and 3.12 (as specified in SRS Section 2.4).
+2. **Multi-Python Test Matrix (`test`)**: Executes all 75 automated unit and integration tests via `pytest` across Python 3.10, 3.11, and 3.12 (as specified in SRS Section 2.4).
 3. **NFR Latency & Purity Verification**: Automates latency benchmark verification across 100 runs, verifying the `<= 400 ms` budget (`VAMC-NF-001`) and `0 dB` audio emissions (`VAMC-NF-005`).
 4. **Build & Package Artifacts (`build`)**: Packages standard Python distribution wheels (`.whl`) and source tarballs (`.tar.gz`) with automated artifact archiving and job summaries.
 

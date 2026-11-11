@@ -5,6 +5,7 @@ Detects which supported players are running and picks the one a bare command
 """
 
 import os
+import time
 from typing import Callable, Iterable, List, Optional
 
 # Process-name fragment -> registered controller name, in default priority order.
@@ -34,13 +35,22 @@ def list_running_processes() -> List[str]:
 class PlayerRouter:
     """Chooses the active player from running processes, remembering the last one used."""
 
-    def __init__(self, process_lister: Callable[[], Iterable[str]] = list_running_processes):
+    def __init__(self, process_lister: Callable[[], Iterable[str]] = list_running_processes,
+                 cache_ttl_s: float = 1.0):
         self._list = process_lister
+        self._ttl = cache_ttl_s
+        self._cache: Optional[List[str]] = None
+        self._cache_time = 0.0
         self.last_used: Optional[str] = None
 
     def detect_running(self) -> List[str]:
-        procs = [p.lower() for p in self._list()]
-        return [name for sig, name in PROCESS_SIGNATURES if any(sig in p for p in procs)]
+        """Scans processes, caching briefly so repeated commands stay within the latency budget."""
+        now = time.monotonic()
+        if self._cache is None or now - self._cache_time >= self._ttl:
+            procs = [p.lower() for p in self._list()]
+            self._cache = [name for sig, name in PROCESS_SIGNATURES if any(sig in p for p in procs)]
+            self._cache_time = now
+        return list(self._cache)
 
     def resolve(self, explicit_target: Optional[str] = None,
                 available: Optional[Iterable[str]] = None) -> Optional[str]:
