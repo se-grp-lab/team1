@@ -119,6 +119,25 @@ class MediaDispatcher:
             controller.unmute()
             res_msg = "Unmuted"
 
+        elif action in (ActionType.FULLSCREEN, ActionType.EXIT_FULLSCREEN):
+            enable = action == ActionType.FULLSCREEN
+            success = controller.set_fullscreen(enable)
+            res_msg = ("Fullscreen" if enable else "Exited Fullscreen") if success else "Fullscreen unsupported"
+
+        elif action == ActionType.SUBTITLES_TOGGLE:
+            enable = params.get("enable", True)
+            success = controller.set_subtitles(enable)
+            res_msg = (f"Subtitles {'On' if enable else 'Off'}") if success else "Subtitles unsupported"
+
+        elif action == ActionType.SUBTITLES_TRACK:
+            track = params.get("track", "default")
+            success = controller.select_subtitle_track(track)
+            res_msg = f"Subtitles: {track}" if success else "Subtitles unsupported"
+
+        elif action == ActionType.PLAYBACK_RATE:
+            rate = controller.set_playback_rate(params.get("rate", 1.0))
+            res_msg = f"Speed {rate:g}x"
+
         else:
             success = False
             res_msg = f"Unhandled action {action}"

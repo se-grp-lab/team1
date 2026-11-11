@@ -10,6 +10,7 @@ import urllib.parse
 import urllib.request
 from typing import Any, Callable, Dict, Optional
 
+from .base import BaseMediaController
 from .mock_player import MockMediaPlayer
 
 API_BASE = "https://api.spotify.com/v1"
@@ -125,3 +126,9 @@ class SpotifyController(MockMediaPlayer):
         super().unmute()
         self._push_volume()
         return True
+
+    # Spotify is audio-only: display, subtitle and rate controls are unsupported.
+    set_fullscreen = BaseMediaController.set_fullscreen
+    set_subtitles = BaseMediaController.set_subtitles
+    select_subtitle_track = BaseMediaController.select_subtitle_track
+    set_playback_rate = BaseMediaController.set_playback_rate

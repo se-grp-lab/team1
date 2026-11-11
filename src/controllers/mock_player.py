@@ -23,6 +23,10 @@ class MockMediaPlayer(BaseMediaController):
         self.is_muted = False
         self.shuffle_enabled = False
         self.repeat_enabled = False
+        self.fullscreen = False
+        self.subtitles_enabled = False
+        self.subtitle_track = "default"
+        self.playback_rate = 1.0
 
     def play(self, query: Optional[str] = None) -> bool:
         self.is_playing = True
@@ -103,6 +107,23 @@ class MockMediaPlayer(BaseMediaController):
             self.is_muted = False
         return True
 
+    def set_fullscreen(self, enabled: bool) -> bool:
+        self.fullscreen = bool(enabled)
+        return True
+
+    def set_subtitles(self, enabled: bool) -> bool:
+        self.subtitles_enabled = bool(enabled)
+        return True
+
+    def select_subtitle_track(self, track: str) -> bool:
+        self.subtitle_track = str(track)
+        self.subtitles_enabled = True
+        return True
+
+    def set_playback_rate(self, rate: float) -> float:
+        self.playback_rate = max(0.5, min(2.0, float(rate)))
+        return self.playback_rate
+
     def get_status(self) -> Dict[str, Any]:
         return {
             "name": self.name,
@@ -113,4 +134,8 @@ class MockMediaPlayer(BaseMediaController):
             "is_muted": self.is_muted,
             "shuffle": self.shuffle_enabled,
             "repeat": self.repeat_enabled,
+            "fullscreen": self.fullscreen,
+            "subtitles": self.subtitles_enabled,
+            "subtitle_track": self.subtitle_track,
+            "rate": self.playback_rate,
         }

@@ -21,7 +21,8 @@ Transport = Callable[[Any], None]
 _FORWARDED = (
     "play", "pause", "resume", "toggle", "stop", "seek", "next_track", "prev_track",
     "restart_track", "toggle_shuffle", "toggle_repeat", "volume_up", "volume_down",
-    "volume_set", "mute", "unmute",
+    "volume_set", "mute", "unmute", "set_fullscreen", "set_subtitles",
+    "select_subtitle_track", "set_playback_rate",
 )
 
 
@@ -80,6 +81,14 @@ class MPVController(IPCPlayerController):
         }
         if op == "seek":
             return {"command": ["seek", args[0], "relative"]}
+        if op == "set_fullscreen":
+            return {"command": ["set_property", "fullscreen", bool(args[0])]}
+        if op == "set_subtitles":
+            return {"command": ["set_property", "sub-visibility", bool(args[0])]}
+        if op == "select_subtitle_track":
+            return {"command": ["set_property", "sid", int(args[0]) if str(args[0]).isdigit() else "auto"]}
+        if op == "set_playback_rate":
+            return {"command": ["set_property", "speed", self.playback_rate]}
         if op == "volume_set":
             return {"command": ["set_property", "volume", self.volume]}
         if op in ("volume_up", "volume_down"):
@@ -114,6 +123,14 @@ class VLCController(IPCPlayerController):
         }
         if op == "seek":
             return {"command": "seek", "val": f"{args[0]:+d}s"}
+        if op == "set_fullscreen":
+            return {"command": "fullscreen"}
+        if op == "set_subtitles":
+            return {"command": "subtitle_track", "val": "1" if args[0] else "-1"}
+        if op == "select_subtitle_track":
+            return {"command": "subtitle_track", "val": str(args[0])}
+        if op == "set_playback_rate":
+            return {"command": "rate", "val": str(self.playback_rate)}
         return table.get(op)
 
 
