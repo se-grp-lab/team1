@@ -5,5 +5,7 @@
   "get back to it": "resume",
   "skip ad": "fast forward 15 seconds",
   "silence now": "mute",
-  "listen up": "volume down 20%"
+  "listen up": "volume down 20%",
+  "blast it": "set volume to 100%",
+  "chill": "set volume to 20%"
 }

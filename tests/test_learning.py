@@ -93,6 +93,72 @@ class TestFederatedPrivacy(unittest.TestCase):
         sent = c.sync(np.ones(4))
         self.assertIs(got[0], sent)
 
+    def test_rejects_non_finite_and_invalid_parameters(self):
+        invalid_norms = [float("nan"), float("inf"), float("-inf"), 0.0, -1.0]
+        for val in invalid_norms:
+            with self.subTest(clip_norm=val):
+                with self.assertRaises(ValueError):
+                    FederatedClient(clip_norm=val)
+                with self.assertRaises(ValueError):
+                    clip_update(np.array([1.0, 2.0]), val)
+
+        invalid_multipliers = [float("nan"), float("inf"), float("-inf"), 0.0, -1.0]
+        for val in invalid_multipliers:
+            with self.subTest(noise_multiplier=val):
+                with self.assertRaises(ValueError):
+                    FederatedClient(noise_multiplier=val)
+
+        invalid_deltas = [float("nan"), float("inf"), float("-inf"), 0.0, 1.0, -0.1, 1.5]
+        for val in invalid_deltas:
+            with self.subTest(delta=val):
+                with self.assertRaises(ValueError):
+                    FederatedClient(delta=val)
+
+        invalid_budgets = [float("nan"), float("inf"), float("-inf"), 0.0, -5.0]
+        for val in invalid_budgets:
+            with self.subTest(epsilon_budget=val):
+                with self.assertRaises(ValueError):
+                    FederatedClient(epsilon_budget=val)
+
+    def test_rejects_non_finite_weight_deltas(self):
+        c = FederatedClient(seed=0)
+        non_finite_arrays = [
+            np.array([1.0, float("nan"), 2.0]),
+            np.array([1.0, float("inf"), 2.0]),
+            np.array([float("-inf"), 0.0]),
+        ]
+        for arr in non_finite_arrays:
+            with self.subTest(array=arr):
+                with self.assertRaises(ValueError):
+                    c.prepare_update(arr)
+                with self.assertRaises(ValueError):
+                    c.sync(arr)
+                with self.assertRaises(ValueError):
+                    clip_update(arr, 1.0)
+                with self.assertRaises(ValueError):
+                    aggregate([arr])
+
+    def test_aggregate_rejects_empty_and_non_float_or_non_finite(self):
+        with self.assertRaises(ValueError):
+            aggregate([])
+        with self.assertRaises(TypeError):
+            aggregate([np.array([1, 2, 3])])
+        with self.assertRaises(ValueError):
+            aggregate([np.array([1.0, 2.0]), np.array([float("nan"), 4.0])])
+
+    def test_privacy_budget_cannot_be_bypassed_with_nan(self):
+        # Ensure that attempting to instantiate a client with NaN noise_multiplier or delta fails immediately
+        with self.assertRaises(ValueError):
+            FederatedClient(noise_multiplier=float("nan"))
+        with self.assertRaises(ValueError):
+            FederatedClient(delta=float("nan"))
+        # Ensure updates with NaN do not pass through or corrupt accountant
+        client = FederatedClient(epsilon_budget=5.0)
+        with self.assertRaises(ValueError):
+            client.prepare_update(np.array([float("nan"), 1.0]))
+        self.assertEqual(client.rounds, 0)
+        self.assertEqual(client.epsilon_spent, 0.0)
+
 
 if __name__ == "__main__":
     unittest.main()

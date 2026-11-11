@@ -100,9 +100,38 @@ class VAMCDaemon:
 
 
 if __name__ == "__main__":
+    import sys
+
     daemon = VAMCDaemon()
     daemon.start()
-    print("VAMC Daemon running. Triggering sample command 'play'...")
-    res = daemon.process_voice_command(b"\x00" * 32000, simulated_text="play")
-    print(f"Status: {res['dispatch']['message']} in {res['e2e_latency_ms']:.2f} ms")
+
+    if "--interactive" in sys.argv or "-i" in sys.argv:
+        print("=" * 60)
+        print(" Voice Assistant for Multimedia Controls (VAMC) - Live CLI")
+        print(" Type voice commands (e.g. 'play', 'mute', 'blast it', 'volume up 20%')")
+        print(" Type 'exit' or 'quit' to stop.")
+        print("=" * 60)
+        try:
+            while True:
+                user_cmd = input("\n🎤 VAMC> ").strip()
+                if not user_cmd:
+                    continue
+                if user_cmd.lower() in ("exit", "quit", "q"):
+                    break
+                res = daemon.process_voice_command(b"\x00" * 32000, simulated_text=user_cmd)
+                fb = res["feedback"]
+                intent = res["intent"]
+                alias_note = f" (Alias -> '{res['resolved_text']}')" if res['resolved_text'] != res['transcription'] else ""
+                print(f"  Action   : {intent.action.name}{alias_note}")
+                print(f"  Dispatch : {res['dispatch']['message']}")
+                print(f"  Feedback : {fb.icon} {fb.message} (0.0 dB silent emission)")
+                print(f"  Latency  : {res['e2e_latency_ms']:.2f} ms (Target <= 400 ms)")
+        except (KeyboardInterrupt, EOFError):
+            print()
+    else:
+        print("VAMC Daemon running. Triggering sample command 'play'...")
+        res = daemon.process_voice_command(b"\x00" * 32000, simulated_text="play")
+        print(f"Status: {res['dispatch']['message']} in {res['e2e_latency_ms']:.2f} ms")
+        print("Tip: Run with --interactive (or -i) for live interactive command prompt.")
+
     daemon.stop()
