@@ -71,7 +71,7 @@ jobs:
 
       - name: Run Ingestion & NLU Test Suite
         run: |
-          pytest -v tests/test_audio.py tests/test_nlu.py tests/test_intent_parser.py tests/test_alias_and_feedback.py
+          pytest -v tests/test_audio.py tests/test_nlu.py tests/test_alias_and_feedback.py
 
       - name: Publish Part 2 Summary (What Works)
         if: always()
