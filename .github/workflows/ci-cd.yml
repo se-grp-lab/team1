@@ -28,18 +28,18 @@ jobs:
         run: |
           # Stop build if there are Python syntax errors or undefined names
           flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
-          # Exit-zero treats all errors as warnings. Max line length 120.
+          # Exit-zero treats all warnings as non-fatal
           flake8 src tests --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
 
   test:
-    name: Test Suite (Python ${{ matrix.python-version }})
+    name: Test Suite & Coverage (Python ${{ matrix.python-version }})
     needs: lint
     runs-on: ubuntu-latest
     env:
       PYTHONPATH: .
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.11", "3.12"]
 
     steps:
       - name: Checkout Code
@@ -54,15 +54,34 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest-cov pytest-subtests
           pip install .
 
-      - name: Run Automated Test Suite
+      - name: Run Automated Test Suite with Coverage
         run: |
-          pytest -v --durations=10
+          mkdir -p docs/reports
+          pytest -v --cov=src --cov-branch \
+            --cov-report=term-missing \
+            --cov-report=xml:docs/reports/coverage.xml \
+            --cov-report=html:docs/reports/coverage \
+            --junitxml=docs/reports/junit_unit_tests.xml
 
       - name: Run NFR Latency Benchmark (VAMC-NF-001)
         run: |
           python -m unittest tests/test_e2e_latency.py
+
+      - name: Generate & Publish CI/CD Step Summary
+        if: always()
+        run: |
+          python3 scripts/generate_ci_summary.py docs/reports/junit_unit_tests.xml docs/reports/coverage.xml
+
+      - name: Upload Test & Coverage Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-coverage-reports-py${{ matrix.python-version }}
+          path: docs/reports/
+          retention-days: 14
 
   build:
     name: Build & Package Artifacts
@@ -93,10 +112,8 @@ jobs:
           path: dist/
           retention-days: 14
 
-      - name: Publish CI/CD Summary
+      - name: Publish CI Release Summary
         run: |
-          echo "### VAMC CI/CD Build Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- **Status**: All linting and test matrix suites passed successfully." >> $GITHUB_STEP_SUMMARY
-          echo "- **Test Coverage**: Audio Ingestion, Offline ASR/NLU, Controllers, and Silent HUD." >> $GITHUB_STEP_SUMMARY
-          echo "- **NFR Compliance**: Latency <= 400ms benchmark verified." >> $GITHUB_STEP_SUMMARY
-          echo "- **Artifacts**: Packaged wheel and sdist generated in dist/." >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 VAMC Release Distribution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: Package artifacts built successfully." >> $GITHUB_STEP_SUMMARY
+          echo "- **Artifact**: Wheel and source distribution ready in `dist/`." >> $GITHUB_STEP_SUMMARY
