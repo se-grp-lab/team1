@@ -5,7 +5,7 @@ from src.ui.theme import DEFAULT_THEME, HIGH_CONTRAST_THEME
 class TestHUDTheming(unittest.TestCase):
     def test_default_theme_properties(self):
         self.assertEqual(DEFAULT_THEME.border_radius_px, 24)
-        self.assertIn("rgba", DEFAULT_THEME.background_rgba.lower() if "rgba" in DEFAULT_THEME.background_rgba else "#")
+        self.assertTrue(DEFAULT_THEME.background_rgba.startswith("#"))
         self.assertEqual(DEFAULT_THEME.auto_dismiss_delay_ms, 2500)
 
     def test_high_contrast_theme_accessibility(self):
