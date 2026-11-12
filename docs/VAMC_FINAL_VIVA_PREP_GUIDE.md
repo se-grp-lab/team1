@@ -3,7 +3,8 @@
 **Team 1:** Andey Hemanth, Aadya Arvind, Aakash Sharma, Soubhagya  
 **Evaluation Date:** November 2026  
 **Repository:** `se-grp-lab/team1` (Branch: `main`)  
-**Status:** 0 Open PRs, 0 Open Issues, 79/79 Passing Tests, 86% Code & Branch Coverage  
+**Status:** 0 Open PRs, 0 Open Issues, 86/86 Passing Tests, 86.5% Code Coverage  
+**Sprints Completed:** Sprint 1 (Core Engine), Sprint 2 (IPC, HUD & Edge Intelligence), Sprint 3 (Automated Testing & CI/CD Pipeline)  
 
 ---
 
