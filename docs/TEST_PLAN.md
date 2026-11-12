@@ -1,7 +1,7 @@
 # Software Test Plan (IEEE 829 Standard)
 ## Project: Voice Assistant for Multimedia Controls (VAMC)
 **Document Identifier:** VAMC-STP-001  
-**Version:** 2.0 (Post Sprint 2 Finalization)  
+**Version:** 3.0 (Post Sprint 3 CI/CD & Testing Finalization)  
 **Date:** November 2026  
 **Authors:** Team 1 (Andey Hemanth, Aadya Arvind, Aakash Sharma, Soubhagya)  
 
@@ -10,7 +10,7 @@
 ## 1. Introduction & Objectives
 The Voice Assistant for Multimedia Controls (VAMC) is a low-latency, privacy-first, offline-capable voice assistant engineered to command desktop and streaming media players (VLC, MPV, Spotify) without polluting playback audio. 
 
-This test plan defines the testing strategy, tools, scope, and validation criteria for the VAMC system following Sprints 1 and 2. The primary objective is to verify that all functional requirements (FRs) and non-functional requirements (NFRs) specified in the IEEE Software Requirements Specification (SRS) are met with high code and branch coverage, deterministic latency budgets, and rigorous security enforcement.
+This test plan defines the testing strategy, tools, scope, and validation criteria for the VAMC system across Sprints 1, 2, and 3. The primary objective is to verify that all functional requirements (FRs), non-functional requirements (NFRs), and continuous integration (CI/CD) quality gates specified in the IEEE Software Requirements Specification (SRS) are met with high code and branch coverage, deterministic latency budgets, and rigorous security enforcement.
 
 ---
 
@@ -98,3 +98,6 @@ This test plan defines the testing strategy, tools, scope, and validation criter
 | **TC-FED-01** | NFR-05 | Verify DP epsilon accumulation | 3 consecutive client rounds | Epsilon budget decrements accurately | PASS |
 | **TC-FED-02** | NFR-06 | Verify NaN gradient rejection | Vector containing `[0.1, NaN]` | Rejected with `ValueError`; budget untouched | PASS |
 | **TC-LAT-01** | NFR-01 | Verify 100-run pipeline latency | 100 simulated commands | 100% execute under 100ms; avg $< 35\text{ms}$ | PASS |
+| **TC-CI-01** | QA-01 | Verify CI step summary generation | JUnit XML & Coverage XML | Rich markdown table rendered to step summary | PASS |
+| **TC-CI-02** | QA-02 | Verify quality gate coverage check | Generated Cobertura XML | Asserts statement & branch coverage $\ge 80\%$ | PASS |
+| **TC-SEC-03** | NFR-03 | Verify repository plaintext secrets scan | Scan all JSON/YAML files | Zero secrets found in configs | PASS |
