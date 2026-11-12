@@ -1,0 +1,11 @@
+{
+  "lights out": "fullscreen",
+  "movie pause": "pause",
+  "popcorn break": "pause",
+  "roll tape": "resume",
+  "turn it down": "volume down 20%",
+  "theatre mode": "set volume to 85%",
+  "turn on subs": "enable subtitles",
+  "turn off subs": "turn off subtitles",
+  "replay scene": "rewind 15 seconds"
+}
