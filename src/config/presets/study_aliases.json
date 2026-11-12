@@ -1,0 +1,9 @@
+{
+  "focus": "play lofi hip hop on spotify",
+  "break time": "pause",
+  "resume study": "resume",
+  "white noise": "play ambient rainfall",
+  "whisper": "set volume to 25%",
+  "deep work": "mute",
+  "session done": "stop"
+}
